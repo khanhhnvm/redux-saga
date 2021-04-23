@@ -3,9 +3,8 @@ import "../node_modules/bootstrap/dist/css/bootstrap.min.css";
 import Main from './components/MainComponent' ;
 import { HashRouter as Router} from 'react-router-dom';
 import { Provider } from 'react-redux';
-import { ConfigureStore } from './redux/configureStore';
+import store from './redux/configureStore';
 
-const store = ConfigureStore();
 
 const App = () => {
   return (

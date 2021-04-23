@@ -1,16 +1,18 @@
-import React, {useEffect} from 'react';
-import Home from './HomeComponent';
-import Menu from './MenuComponent';
-import Header from './HeaderComponent';
-import Footer from './FooterComponent';
+import React, { useEffect } from 'react';
+import { connect, useDispatch } from 'react-redux';
+import { Redirect, Route, Switch, withRouter } from 'react-router-dom';
+import { CSSTransition, TransitionGroup } from 'react-transition-group';
+import { getComments } from '../redux/reducers/comments';
+import { getDishes } from '../redux/reducers/dishes';
+import { getLeaders } from '../redux/reducers/leaders';
+import { getPromotions } from '../redux/reducers/promotions';
+import About from './AboutComponent';
 import Contact from './ContactComponent';
 import DishDetail from './DishDetailComponent';
-import About from './AboutComponent';
-import { postComment, postFeedback, fetchDishes, fetchComments, fetchPromos, fetchLeaders } from '../redux/ActionCreators';
-import { Switch, Route, Redirect, withRouter } from 'react-router-dom';
-import { connect } from 'react-redux';
-import { actions } from 'react-redux-form';
-import { TransitionGroup, CSSTransition } from 'react-transition-group';
+import Footer from './FooterComponent';
+import Header from './HeaderComponent';
+import Home from './HomeComponent';
+import Menu from './MenuComponent';
 
 const mapStateToProps = state => {
   return {
@@ -21,31 +23,32 @@ const mapStateToProps = state => {
   }
 }
 
-const mapDispatchToProps = dispatch => ({
-  postComment: (dishId, rating, author, comment) => dispatch(postComment(dishId, rating, author, comment)),
-  postFeedback: (firstname, lastname, telnum, email, agree, contactType, message) => dispatch(postFeedback(firstname, lastname, telnum, email, agree, contactType, message)),
-  fetchDishes: () =>  dispatch(fetchDishes()),
-  resetFeedbackForm: () => { dispatch(actions.reset('feedback'))},
-  fetchComments: () => dispatch(fetchComments()),
-  fetchPromos: () => dispatch(fetchPromos()),
-  fetchLeaders: () => dispatch(fetchLeaders()),
-});
+// const mapDispatchToProps = dispatch => ({
+//   postComment: (dishId, rating, author, comment) => dispatch(postComment(dishId, rating, author, comment)),
+//   postFeedback: (firstname, lastname, telnum, email, agree, contactType, message) => dispatch(postFeedback(firstname, lastname, telnum, email, agree, contactType, message)),
+//   fetchDishes: () =>  dispatch(fetchDishes()),
+//   resetFeedbackForm: () => { dispatch(actions.reset('feedback'))},
+//   fetchComments: () => dispatch(fetchComments()),
+//   fetchPromos: () => dispatch(fetchPromos()),
+//   fetchLeaders: () => dispatch(fetchLeaders()),
+// });
 
 
 const Main = (props) => {
-  const {dishes, comments, promotions, leaders, postComment, postFeedback, fetchDishes, resetFeedbackForm, fetchComments, fetchPromos, fetchLeaders } = props;
+  const {dishes, comments, promotions, leaders, postComment, postFeedback, resetFeedbackForm } = props;
   const [selectedDish, setSelectedDish] = React.useState(null);
+  const dispatch = useDispatch();
   
   const onDishSelect = (dishId) => {
     setSelectedDish(dishId);
   };
 
   useEffect(() => {
-    fetchDishes();
-    fetchComments();
-    fetchPromos();
-    fetchLeaders();
-  },[]);
+    dispatch(getDishes())
+    dispatch(getLeaders())
+    dispatch(getComments())
+    dispatch(getPromotions())
+  },[dispatch]);
   
   const HomePage = () => {
     return(
@@ -75,7 +78,7 @@ const Main = (props) => {
       />
     );
   };
-  
+
   return (
     <div>
       <Header />
@@ -105,4 +108,4 @@ const Main = (props) => {
   )
 }
 
-export default withRouter(connect(mapStateToProps,mapDispatchToProps)(Main));
+export default withRouter(connect(mapStateToProps)(Main));

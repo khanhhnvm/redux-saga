@@ -112,7 +112,7 @@ const RenderComments = ({comments}) => {
         {comments.map(comment => (
           <Fade in>
           <ul key={comment.id} className="list-unstyled">
-            <li className="mb-2">{comment.comment}</li>
+            <li className="mb-2" >{comment.comment}</li>
             <li>
               -- {comment.author}
               {", "}
